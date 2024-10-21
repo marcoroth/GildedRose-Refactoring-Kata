@@ -6,6 +6,45 @@ class GildedRose
 
   def update_quality()
     @items.each do |item|
+      if item.name == "Aged Brie"
+        item.quality += 1 if item.quality < 50
+        item.sell_in = item.sell_in - 1
+
+        if item.sell_in < 0
+          item.quality += 1 if item.quality < 50
+        end
+      end
+
+      if item.name == "Backstage passes to a TAFKAL80ETC concert"
+        item.sell_in = item.sell_in - 1
+
+        if item.quality < 50
+          item.quality += 1
+
+          if item.sell_in < 10
+            item.quality += 1
+          end
+
+          if item.sell_in < 5
+            item.quality += 1
+          end
+        end
+      end
+
+      if item.name == "Sulfuras, Hand of Ragnaros"
+        # being a legendary item, never has to be sold or decreases in Quality
+      end
+
+      if item.name == "Conjured Mana Cake"
+        item.quality = Math.max(item.quality - 2, 0)
+        item.sell_in = item.sell_in - 1
+      end
+
+
+      # ----
+
+
+
       if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert"
         if item.quality > 0
           if item.name != "Sulfuras, Hand of Ragnaros"
