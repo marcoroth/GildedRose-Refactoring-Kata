@@ -7,86 +7,29 @@ class GildedRose
   def update_quality()
     @items.each do |item|
       if item.name == "Aged Brie"
-        item.quality += 1 if item.quality < 50
-        item.sell_in = item.sell_in - 1
+        item.quality = [item.quality + 1, 50].min
+        item.sell_in -= 1
+        item.quality = [item.quality + 1, 50].min if item.sell_in < 0
 
-        if item.sell_in < 0
-          item.quality += 1 if item.quality < 50
-        end
-      end
+      elsif item.name == "Backstage passes to a TAFKAL80ETC concert"
+        item.sell_in -= 1
+        item.quality = [item.quality + 1, 50].min
+        item.quality = [item.quality + 1, 50].min if item.sell_in < 10
+        item.quality = [item.quality + 1, 50].min if item.sell_in < 5
+        item.quality = 0 if item.sell_in < 0
 
-      if item.name == "Backstage passes to a TAFKAL80ETC concert"
-        item.sell_in = item.sell_in - 1
-
-        if item.quality < 50
-          item.quality += 1
-
-          if item.sell_in < 10
-            item.quality += 1
-          end
-
-          if item.sell_in < 5
-            item.quality += 1
-          end
-        end
-      end
-
-      if item.name == "Sulfuras, Hand of Ragnaros"
+      elsif item.name == "Sulfuras, Hand of Ragnaros"
         # being a legendary item, never has to be sold or decreases in Quality
-      end
 
-      if item.name == "Conjured Mana Cake"
-        item.quality = Math.max(item.quality - 2, 0)
+      elsif item.name == "Conjured Mana Cake"
+        item.quality = [item.quality - 2, 0].max
         item.sell_in = item.sell_in - 1
-      end
 
-
-      # ----
-
-
-
-      if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert"
-        if item.quality > 0
-          if item.name != "Sulfuras, Hand of Ragnaros"
-            item.quality = item.quality - 1
-          end
-        end
       else
-        if item.quality < 50
-          item.quality = item.quality + 1
-          if item.name == "Backstage passes to a TAFKAL80ETC concert"
-            if item.sell_in < 11
-              if item.quality < 50
-                item.quality = item.quality + 1
-              end
-            end
-            if item.sell_in < 6
-              if item.quality < 50
-                item.quality = item.quality + 1
-              end
-            end
-          end
-        end
-      end
-      if item.name != "Sulfuras, Hand of Ragnaros"
+        item.quality = [item.quality - 1, 0].max
         item.sell_in = item.sell_in - 1
-      end
-      if item.sell_in < 0
-        if item.name != "Aged Brie"
-          if item.name != "Backstage passes to a TAFKAL80ETC concert"
-            if item.quality > 0
-              if item.name != "Sulfuras, Hand of Ragnaros"
-                item.quality = item.quality - 1
-              end
-            end
-          else
-            item.quality = item.quality - item.quality
-          end
-        else
-          if item.quality < 50
-            item.quality = item.quality + 1
-          end
-        end
+
+        item.quality = [item.quality - 1, 0].max if item.sell_in < 0
       end
     end
   end
